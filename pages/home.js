@@ -14,6 +14,8 @@ import BookmarksLogo from "../components/logo components/bookmarks_logo";
 import { CircularProgress } from "@mui/material";
 import { LoadingAnimation } from "../components/loading_animation";
 import { RouteChangeCheck } from "../utils/RouteChangeCheck";
+import { Post } from "../components/post";
+import Divider from "../components/divider";
 
 const Home = () => {
   const router = useRouter();
@@ -62,74 +64,26 @@ const Home = () => {
         </nav>
         <RouteChangeCheck>
           <main className="bg-background overflow-y-auto flex">
-          {loading ? (
-            <div className="m-auto align-middle">
-              {/* <CircularProgress size={50} /> */}
-              <LoadingAnimation/>
-            </div>
-          ) : (
-            <div>
-              {docs.map((doc) => {
-                return (
-                  <div
-                    key={doc.uid}
-                    className="bg-white flex flex-col w-96 my-5 border-[1.2px] border-gray-300 rounded-md ml-10"
-                  >
-                    <div className="flex my-2 justify-between mx-1 p-2">
-                      <div className="flex space-x-2 ">
-                        <ProfileLogo src={doc.pp} width={24} height={24} />
-                        <h2 className="font-semibold">{doc.username}</h2>{" "}
+            {loading ? (
+              <div className="m-auto align-middle">
+                {/* <CircularProgress size={50} /> */}
+                <LoadingAnimation />
+              </div>
+            ) : (
+              <div className="px-96">
+                {docs.map((doc) => {
+                  return (
+                    <div key={doc.id} className="my-0">
+                      <Post post={doc} currentUser={currentUser} />
+                      <div className="mx-32">
+                        <Divider />
                       </div>
-
-                      <button>
-                        <MoreHorizIcon />
-                      </button>
                     </div>
-                    <div className="w-full flex">
-                      <img className="mx-auto" src={doc.imageURL} alt="" />
-                    </div>
-                    <div className="flex justify-between m-2">
-                      <div className="flex justify-around space-x-3">
-                        <button
-                          onClick={() => {
-                            like(doc, currentUser.uid).then(() => {
-                              setLiked(!liked);
-                              console.log("liked");
-                            });
-                          }}
-                        >
-                          <NotificationLogo />
-                        </button>
-                        <button>
-                          {" "}
-                          <CommentsLogo />
-                        </button>
-                      </div>
-                      <button>
-                        <BookmarksLogo />
-                      </button>
-                    </div>
-                    <div className="mx-2">
-                      <h2 className="font-semibold">
-                        {doc.likes.length} likes
-                      </h2>
-                    </div>
-
-                    <div className="my-2 mx-2 flex space-x-1 align-middle text-center">
-                      <p className="font-semibold">{doc.username}</p>
-                      <p className="break-before-all text-sm text-left">
-                        {/* {doc.caption.length > 50
-                          ? doc.caption.slice(0, 50) + "..."
-                          : doc.caption} */}
-                        {doc.caption}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </main>
+                  );
+                })}
+              </div>
+            )}
+          </main>
         </RouteChangeCheck>
       </section>
     );

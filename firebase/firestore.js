@@ -13,7 +13,7 @@ async function addUser(email, fullname, username,uid ) {
     imageURL: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.ms_ni44c-_TBsdHzF0W5awHaHa%26pid%3DApi&f=1&ipt=bd6bf0cc645b437b48ee13f797ca6d3b484072dadfe65b0f7802200d5aeda34f&ipo=images",
   });
 }
-function getAllUsers() {
+async function getAllUsers() {
   firestore    
     .collection("users")
     .get()
@@ -46,9 +46,47 @@ async function addPost(userID, imageURL, caption,postUID,username,pp) {
     comments: [],
   });
 }
+async function addTask(userID, tasks, title) {
+  const uuid=uuidv4()
+  firestore.collection("tasks").doc(uuid).set({
+    uid: uuid,
+    userID: userID,
+    datePublished:Date(),
+    tasks: tasks.map((task)=>{return {task:task,completed:false}}),
+    title:title,
+  });
+}
+
+async function deleteTask(taskID) { 
+  firestore.collection("tasks").doc(taskID).delete()
+}
+async function deleteUser(uid) { 
+  firestore.collection("users").doc(uid).delete()
+}
+async function completeTask(taskID,tasks) { 
+  
+  firestore.collection("tasks").doc(taskID).update({
+    tasks: tasks.map((task)=>{return {task:task.task,completed:task.completed}}),
+  })
+}
+
+async function makeAdmin(uid) { 
+  firestore.collection("users").doc(uid).update({
+    admin: true,
+  })
+}
+async function removeAdmin(uid) { 
+  firestore.collection("users").doc(uid).update({
+    admin: false,
+  })
+}
 
 async function getUserPosts(uuid){
   const snapshot = await firestore.collection('posts').where('userID',"==",uuid).orderBy('datePublished','desc').get()
+    return snapshot.docs.map(doc => doc.data());
+}
+async function getUserTasks(uuid){
+  const snapshot = await firestore.collection('tasks').where('userID',"==",uuid).orderBy('datePublished','desc').get()
     return snapshot.docs.map(doc => doc.data());
 }
 async function getPosts(){
@@ -82,20 +120,6 @@ async function like(post, userID) {
       likes: postLikes,
     })
   }
-  // let data;
-  // firestore.collection("posts").doc(postID)
-  //   .where("likes", "array-contains", userID).get().then((snapshot) => {
-  //   data = snapshot.data()
-  //   if (!data) {
-  //     firestore.collection("posts").doc(postID).update({
-  //   likes: arrayUnion(userID),
-  // });
-  //   } else {
-  //     firestore.collection("posts").doc(postID).update({
-  //       likes: arrayRemove(userID),
-  //     });
-  //   }
-  //  })
 }
   
 
@@ -108,5 +132,12 @@ export {
   addPost,
   getPosts,
   getUserPosts,
+  deleteUser,
   like,
+  getUserTasks,
+  deleteTask,
+  addTask,
+  completeTask,
+  makeAdmin,
+  removeAdmin
 };

@@ -210,29 +210,35 @@ const SideBar = (props) => {
         </button>)
         }
         {
-              currentRoute === "/search" ? (<button
+          currentUser?.admin === true ? (
+            <>
+              {
+              currentRoute === "/admin" ? (<button
           className="p-4 mr-5 bg-[#ffd60a] text-white font-bold rounded-r-full"
           background-color
         >
-          <Link href="/search">
+          <Link href="/admin">
             <div className="flex space-x-1">
               {/* <Image src={NotificationLogo} alt=""></Image> */}
               <SearchLogo />
-              <span className="pl-2 font-semibold">Search</span>
+              <span className="pl-2 font-semibold">Admin</span>
             </div>
           </Link>
         </button>):(<button
           className="p-4 mr-5 hover:bg-gray-50 rounded-r-full"
           background-color
         >
-          <Link href="/search">
+          <Link href="/admin">
             <div className="flex space-x-1">
               {/* <Image src={NotificationLogo} alt=""></Image> */}
               <SearchLogo />
-              <span className="pl-2 font-semibold">Search</span>
+              <span className="pl-2 font-semibold">Admin</span>
             </div>
           </Link>
         </button>)
+        }
+            </>
+          ):(<></>)
         }
         
         {
@@ -321,7 +327,7 @@ const SideBar = (props) => {
           <Link href="/profile">
             <div className="flex space-x-1">
               {/* <Image src={NotificationLogo} alt=""></Image> */}
-              <ProfileLogo width={24} height={24} src={currentUser.imageURL} />
+              <ProfileLogo width={24} height={24} src={currentUser?.imageURL} />
               <span className="pl-2 font-semibold">Profile</span>
             </div>
           </Link>
