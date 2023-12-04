@@ -183,7 +183,7 @@ const Tasks = () => {
                   refreshPage={refreshPage}
                 />
                 <div className="flex space-x-3">
-                  <h1 className="text-3xl font-bold ">My tasks</h1>
+                  <h1 className="text-3xl font-bold ">My projects</h1>
                   <Button
                     variant="text"
                     onClick={() => {
